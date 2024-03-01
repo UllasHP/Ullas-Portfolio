@@ -1,36 +1,41 @@
-function sendMail() {
-    var name = document.getElementById("name").value;
-    var email = document.getElementById("email").value;
-    var subject = document.getElementById("subject").value;
-    var message = document.getElementById("message").value;
+const form = document.getElementById('forms');
 
-   
-    if (!name || !email || !subject || !message) {
-        alert("Please fill in all fields.");
-        return;
-    }
+const nameInput = document.getElementById('name');
 
-    var pars = {
-        name: name,
-        email: email,
-        subject: subject,
-        message: message,
+const emailInput = document.getElementById('email');
+
+const subjectInput = document.getElementById('subject');
+
+const messageInput = document.getElementById('message');
+
+const serviceID = 'service_ne9l55k'; 
+
+const templateID = 'template_k0q4f6f'; 
+
+const publickey = '9oGTL7YIlhk1MfOT9'; 
+
+emailjs.init(publickey);
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const inputData = {
+        from_name: nameInput.value,
+        user_email: emailInput.value,
+        subject: subjectInput.value,
+        message: messageInput.value
     };
 
-    const serviceID = "service_ne9l55k";
-    const templateID = "template_k0q4f6f";
-
-    emailjs.send(serviceID, templateID, pars)
-        .then((res) => {
-            document.getElementById("name").value = "";
-            document.getElementById("email").value = "";
-            document.getElementById("subject").value = "";
-            document.getElementById("message").value = "";
-            console.log(res);
-            alert("Your message sent successfully");
-        })
-        .catch((err) => {
-            console.error("Error sending email:", err);
-            alert("Oops! Something went wrong. Please try again later.");
-        });
-}
+    emailjs.send(serviceID, templateID, inputData).then(
+        () => {
+            nameInput.value = '';
+            emailInput.value = ''; 
+            subjectInput.value = '';
+            messageInput.value = '';
+            console.log('Success!');
+        },
+        (error) => {
+            console.log(error);
+        }
+    );
+});
